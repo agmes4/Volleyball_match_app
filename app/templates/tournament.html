@@ -1,0 +1,16 @@
+{% extends 'index.html' %}
+{% block content %}
+<table>
+    <th>
+        <td>teams</td>
+    </th>
+{% for team in teams %}
+    <tr>
+        <td>
+            {{ team.name }}
+        </td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}
+
