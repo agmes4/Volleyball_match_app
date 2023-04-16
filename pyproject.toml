@@ -1,0 +1,26 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "Volleyball-match-app"
+version = "0.0.1"
+description = "a"
+
+authors = [
+    "Alexander <robokatze182@gmx.de>"
+]
+
+[run]
+source = "Volleyball_match_app"
+packages = [{include = "app" }]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">3.7"
+flask = "^2.2.2"
+flask_sqlalchemy="^3.0.0"
+SQLAlchemy = "^1.4.40"
+Flask-WTF = "^1.0.1"
+Werkzeug = "^2.2.2"
+toml = "^0.10.2"
