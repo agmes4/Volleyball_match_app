@@ -1,12 +1,13 @@
 import os
+import random
 from pathlib import Path
 
 from flask import Flask, render_template, request, flash, redirect, url_for, session
-from .models import db, team, match, tournament
-from .application import get_teams
-from sqlalchemy.sql import func
+from .models import db
 
+from .models.match import Match
 from .models.team import Team
+from .models.tournament import Tournament
 
 
 def creat_app(test_config=None):
@@ -25,7 +26,8 @@ def creat_app(test_config=None):
 
     db.init_app(app)
     with app.app_context():
-        from .models import match, team, tournament
+        from .models import team
+        #db.drop_all()
         db.create_all()
     @app.route("/")
     def index():
@@ -47,7 +49,36 @@ def creat_app(test_config=None):
             team = Team(name=name)
             db.session.add(team)
             db.session.commit()
-        flash("team_error", "Team already exists ")
+        else:
+            flash("team_error", "Team already exists ")
         return redirect(url_for('teams'))
+
+    @app.route("/create-tournament", methods=["POST", "GET"])
+    def create_touna():
+        if request.method == "GET":
+            return render_template("create_tournament.html", teams=Team.query.all())
+        if len(request.form.getlist("team[]")) < 2 and len(request.form.getlist("team[]")) % 2 == 0:
+            flash("Tournament_error", "at least two teams mast be in an tournament")
+            return render_template("create_tournament.html", teams=Team.query.all())
+        teams = []
+        for team in request.form.getlist("team[]"):
+            teams.append(Team.query.filter_by(id=team).first())
+
+        tourn = Tournament(name=request.form.get("tournament_name"), teams=teams)
+        db.session.add(tourn)
+        db.session.commit()
+        return redirect("/tournament?tourn="+ str(tourn.id))
+
+    @app.route("/tournament")
+    def tourn():
+        tourn_id = request.args.get("tourn", "")
+
+        tourn = Tournament.query.filter_by(id=tourn_id).first()
+        if tourn is None:
+            return 404, "Tournament not found"
+
+        return render_template("tournament.html", tourn=tourn, )
+
+
 
     return app
