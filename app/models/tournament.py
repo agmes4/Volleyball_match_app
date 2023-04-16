@@ -1,4 +1,4 @@
-from app import db
+from . import db, team, match
 from sqlalchemy import Column
 
 tags_teams = db.Table('tags_team',
@@ -11,8 +11,8 @@ tags_matches = db.Table('tags_match',
 )
 class Tournament(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    teams = db.relationship('Tag', secondary=tags_teams, lazy='subquery',
+    teams = db.relationship('Team', secondary=tags_teams, lazy='subquery',
         backref=db.backref('teams', lazy=True))
 
-    matches = db.relationship('Tag', secondary=tags_matches, lazy='subquery',
+    matches = db.relationship('Match', secondary=tags_matches, lazy='subquery',
         backref=db.backref('matches', lazy=True))

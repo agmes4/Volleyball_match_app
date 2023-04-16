@@ -1,0 +1,32 @@
+{% extends 'index.html' %}
+{% block content %}
+<table>
+    <th>
+        <td>teams</td>
+    </th>
+{% for team in teams %}
+    <tr>
+        <td>
+            {{ team.name }}
+        </td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}
+
+{% block forms %}
+{% with messages = get_flashed_messages('team_error') %}
+{% if messages %}
+<ul class=flashes>
+    {% for message, category in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+<form method="POST" action="/creat-team">
+    <label for="team_name">Team name: </label>
+    <input id="team_name" name="team_name" placeholder="-- team name --" required>
+    <button>submit</button>
+</form>
+{% endblock %}

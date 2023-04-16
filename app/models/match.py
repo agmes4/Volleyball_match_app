@@ -1,6 +1,6 @@
 from sqlalchemy import Column
 
-from app import db
+from . import db
 
 
 class Match(db.Model):
