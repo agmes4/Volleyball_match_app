@@ -1,4 +1,3 @@
-from sqlalchemy import Column
 from . import db
 
 class Team(db.Model):
