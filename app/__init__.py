@@ -29,6 +29,7 @@ def creat_app(test_config=None):
         from .models import team
         #db.drop_all()
         db.create_all()
+
     @app.route("/")
     def index():
         return render_template("home.html")
@@ -65,8 +66,18 @@ def creat_app(test_config=None):
             teams.append(Team.query.filter_by(id=team).first())
 
         tourn = Tournament(name=request.form.get("tournament_name"), teams=teams)
+        random.shuffle(teams)
+        matches = []
+
         db.session.add(tourn)
         db.session.commit()
+        for team_index in range(0, int(len(teams) / 2), 2):
+            print("HAllo")
+            match = Match(team1=teams[team_index], team2=teams[team_index + 1], tourn_id=tourn)
+            db.session.add(match)
+            db.session.commit()
+            matches.append(match)
+        tourn.set_matches(matches)
         return redirect("/tournament?tourn="+ str(tourn.id))
 
     @app.route("/tournament")
@@ -77,7 +88,11 @@ def creat_app(test_config=None):
         if tourn is None:
             return 404, "Tournament not found"
 
-        return render_template("tournament.html", tourn=tourn, )
+        return render_template("tournament.html", tourn=tourn )
+
+    @app.route("/show-all-tournament")
+    def all_tourns():
+        return render_template("all_tourns.html", tourn=Tournament.query.all())
 
 
 
