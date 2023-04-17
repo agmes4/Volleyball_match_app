@@ -1,4 +1,4 @@
-from random import random
+import random
 
 from . import db
 from .. import Match
@@ -16,17 +16,12 @@ class Tournament(db.Model):
 
     matches = db.relationship("Match" , backref='post')
 
-    def __int__(self, name: str, teams: list):
+    def __init__(self, name: str, teams: list):
         self.name = name
-        self.teams.append(teams)
-        random.shuffle(teams)
-        matches = []
-        for team_index in range(0, int(len(teams) / 2), 2):
-            match = Match(team1=teams[team_index], team2=teams[team_index + 1], tourn_id=self.id)
-            db.session.add(match)
-            db.session.commit()
-            matches.append(match)
-        self.matches.append(matches)
+        self.teams = teams
+
+    def set_matches(self, matches:list):
+        self.matches = matches
 
     def get_ongoing_matches(self) -> list:
         on = []

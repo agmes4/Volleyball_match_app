@@ -9,14 +9,14 @@ class Match(db.Model):
         nullable=False)
     team2 = db.Column(db.Integer, db.ForeignKey('team.id'),
                       nullable=False)
-    point1 = db.Column(db.String(80), nullable=False)
-    point2 = db.Column(db.String(80), nullable=False)
+    point1 = db.Column(db.String(80), nullable=True)
+    point2 = db.Column(db.String(80), nullable=True)
     point3 = db.Column(db.String(80), nullable=True)
     level = db.Column(db.Integer, nullable=False)
     winner = db.Column(db.Integer, db.ForeignKey('team.id'),
         nullable=True)
     tourn_id = db.Column(db.Integer, db.ForeignKey('tournament.id'))
-    def __int__(self, team1: int, team2: int, tourn_id: int, points=[], level=1):
+    def __init__(self, team1: int, team2: int, tourn_id: int, points=[], level=1):
         self.team1 = team1
         self.team2 = team2
         self.tourn_id = tourn_id
@@ -56,7 +56,7 @@ class Match(db.Model):
             self.winner = self.team2
         db.session.commit()
 
-    def __repr__(self)-> str:
+    def __repr__(self) -> str:
         output = f"Team: {self.team1} played against {self.team2}\n"
         output += f"with set 1 {self.point1}, set 2 {self.point2}, set 3 {self.point3}"
         return output
