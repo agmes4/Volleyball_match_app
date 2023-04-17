@@ -1,3 +1,5 @@
 .venv
 .idea
 instance
+.ruff_cache
+venv
