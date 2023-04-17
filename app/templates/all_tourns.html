@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+{% block content %}
+<table>
+    <th>
+        <td>tournaments</td>
+    </th>
+{% for tour in tourn %}
+    <form method="GET" action="/tournament">
+    <tr>
+        <td>
+            <button id="tourn" name="tourn" value="{{ tour.id }}">{{ tour.name }}</button>
+        </td>
+    </tr>
+    </form>
+{% endfor %}
+</table>
+{% endblock %}

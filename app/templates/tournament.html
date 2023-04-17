@@ -1,13 +1,39 @@
 {% extends 'index.html' %}
 {% block content %}
+<h1>{{tourn.name}}</h1>
+<table>
+    <tr>
+        <th>Teams in tournament</th>
+    </tr>
+    {% for team in tourn.teams %}
+    <tr>
+        <td>{{ team.name }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<br>
 <table>
     <th>
-        <td>teams</td>
+        <td>team 1</td>
+        <td>team 2</td>
+        <td>points</td>
     </th>
-{% for team in teams %}
+{% for match in tourn.get_ongoing_matches() %}
     <tr>
         <td>
-            {{ team.name }}
+            {{ match.team1 }}
+        </td>
+        <td>
+            {{ match.team2 }}
+        </td>
+        <td>
+            {{ match.point1 }}
+        </td>
+        <td>
+            {{ match.point2 }}
+        </td>
+        <td>
+            {{ match.point3 }}
         </td>
     </tr>
 {% endfor %}
