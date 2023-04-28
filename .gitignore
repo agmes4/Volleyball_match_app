@@ -3,3 +3,5 @@
 instance
 .ruff_cache
 venv
+__pycache__
+Logger
