@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 {% block content %}
-<h1>{{tourn.name}}</h1>
-<table>
+<h1 class="h1">{{tourn.name}}</h1>
+<table class="table">
     <tr>
         <th>Teams in tournament</th>
     </tr>
@@ -12,12 +12,14 @@
     {% endfor %}
 </table>
 <br>
-<table>
-    <th>
-        <td>team 1</td>
-        <td>team 2</td>
-        <td>points</td>
-    </th>
+<table class="table">
+    <tr>
+        <th>team 1</th>
+        <th>team 2</th>
+        <th>Match1</th>
+        <th>Match2</th>
+        <th>Match3</th>
+    </tr>
 {% for match in tourn.get_ongoing_matches() %}
     <tr>
         <td>
