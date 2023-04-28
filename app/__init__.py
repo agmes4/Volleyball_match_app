@@ -1,14 +1,15 @@
+import logging
 import os
 import random
 from pathlib import Path
 
 from flask import Flask, render_template, request, flash, redirect, url_for, session
 from .models import db
-
 from .models.match import Match
 from .models.team import Team
 from .models.tournament import Tournament
 
+log = logging.getLogger()
 
 def creat_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True, instance_path=os.path.join(os.getcwd(), 'instance'))
@@ -42,6 +43,7 @@ def creat_app(test_config=None):
     def creat_team():
         name = request.form.get('team_name', None)
         if name is None:
+            log.debug("the team name that was set is invalid")
             flash("team_error", "invalid name")
             return redirect(url_for('teams'))
         print(name)
@@ -58,7 +60,9 @@ def creat_app(test_config=None):
     def create_touna():
         if request.method == "GET":
             return render_template("create_tournament.html", teams=Team.query.all())
-        if len(request.form.getlist("team[]")) < 2 and len(request.form.getlist("team[]")) % 2 == 0:
+
+        if len(request.form.getlist("team[]")) < 2 and \
+                len(request.form.getlist("team[]")) % 2 == 0:
             flash("Tournament_error", "at least two teams mast be in an tournament")
             return render_template("create_tournament.html", teams=Team.query.all())
         teams = []
@@ -67,18 +71,19 @@ def creat_app(test_config=None):
 
         tourn = Tournament(name=request.form.get("tournament_name"), teams=teams)
         random.shuffle(teams)
-        matches = []
+
 
         db.session.add(tourn)
         db.session.commit()
-        for team_index in range(0, int(len(teams) / 2), 2):
-            print("HAllo")
-            match = Match(team1=teams[team_index], team2=teams[team_index + 1], tourn_id=tourn)
+        matches = []
+        logging.debug(f"{request.form.get('groups', 2)=}")
+        for team_index in range(0, len(teams), 2):
+            match = Match(team1=teams[team_index].id, team2=teams[team_index + 1].id, tourn_id=tourn.id)
             db.session.add(match)
             db.session.commit()
             matches.append(match)
         tourn.set_matches(matches)
-        return redirect("/tournament?tourn="+ str(tourn.id))
+        return redirect(f"/tournament?tourn={tourn.id}")
 
     @app.route("/tournament")
     def tourn():
@@ -88,7 +93,7 @@ def creat_app(test_config=None):
         if tourn is None:
             return 404, "Tournament not found"
 
-        return render_template("tournament.html", tourn=tourn )
+        return render_template("tournament.html", tourn=tourn)
 
     @app.route("/show-all-tournament")
     def all_tourns():

@@ -1,4 +1,3 @@
-from sqlalchemy.orm import Mapped
 
 from . import db
 
