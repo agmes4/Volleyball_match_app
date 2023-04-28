@@ -1,0 +1,41 @@
+{% extends 'index.html' %}
+
+{% block forms %}
+{% with messages = get_flashed_messages('Tournament_error') %}
+{% if messages %}
+<ul class=flashes>
+    {% for message, category in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+
+
+<form method="POST" class="form-check-input" action="/create-tournament">
+    <label for="tournament_name">Team name: </label>
+    <input  id="tournament_name" name="tournament_name" placeholder="-- team name --" required>
+
+
+    <table class="table">
+        <tr>
+            <th>Teams</th>
+            <th>check boxes</th>
+        </tr>
+        {% for team in teams %}
+        <tr>
+            <td>
+            {{ team.name }}
+            </td>
+            <td>
+                <input name="team[]" type="checkbox" value="{{team.id}}">
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <label for="groups">Amount of groups in an round</label>
+    <input id="groups" name="groups" type="range" min="2" max="2" step="2">
+    <button>submit</button>
+</form>
+{% endblock %}
