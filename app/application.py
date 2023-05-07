@@ -13,7 +13,7 @@ def get_teams_level(tourn, level=0) -> dict:
     if level == 0:
         return {"1": tourn.teams}
     # TODO: Add the capability for more then tow levels
-    matches = Match.query.filter(id=tourn.id).all()
+    matches = Match.query.filter_by(id=tourn.id).all()
     output = {"1": [], "2": []}
     for match in matches:
         output["1"].append(match.winner)
@@ -25,11 +25,13 @@ def get_teams_level(tourn, level=0) -> dict:
 
 
 def generate_matches(tourn: int, level=1) -> list:
-    tournament = Tournament.query.filter(id=tourn).first()
+    tournament = Tournament.query.filter_by(id=tourn).first()
     matches = []
-    for level, teams in get_teams_level(tournament, level=level - 1):
+    dic = get_teams_level(tournament, level=level - 1)
+    for level in dic:
+        teams = dic[level]
         for team_index in range(0, int(len(teams) / tournament.groups), 2):
-            match = Match(team1=teams[team_index].id, team2=teams[team_index + 1].id, tourn_id=tourn.id, level=level)
+            match = Match(team1=teams[team_index].id, team2=teams[team_index + 1].id, tourn_id=tourn, level=level)
             db.session.add(match)
             db.session.commit()
             matches.append(match)

@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 {% block content %}
-<h1 class="h1">{{tourn.name}}</h1>
+<h1 class="headline">{{tourn.name}}</h1>
 <table class="table-secondary">
     <tr>
         <th>Teams in tournament</th>
@@ -22,21 +22,36 @@
     </tr>
 {% for match in tourn.get_ongoing_matches() %}
     <tr class="tab-content">
+
         <td>
-            {{ match.team1 }}
+            {{match.team1}}
         </td>
         <td>
             {{ match.team2 }}
         </td>
+        {% if match.point1 %}
         <td>
             {{ match.point1 }}
         </td>
+        {% if match.point2 %}
         <td>
             {{ match.point2 }}
         </td>
+        {% if match.point3 %}
         <td>
             {{ match.point3 }}
         </td>
+        {% endif %}
+        {% endif %}
+        {% endif %}
+        {% if not match.point1 or not match.point2 or not match.point3 %}
+        <td>
+            <form method="POST" action="/addpoints/{{match.id}}">
+                <input class="input-group-text" name="points" placeholder="t1/t2">
+                <button class="btn-light input-group-text">submit</button>
+            </form>
+        </td>
+        {% endif %}
     </tr>
 {% endfor %}
 </table>
