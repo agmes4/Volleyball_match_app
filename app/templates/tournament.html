@@ -47,7 +47,9 @@
         {% if not match.point1 or not match.point2 or not match.point3 %}
         <td>
             <form method="POST" action="/addpoints/{{match.id}}">
-                <input class="input-group-text" name="points" placeholder="t1/t2">
+                <input class="" name="point_t1" placeholder="t1" type="number">
+                x
+                <input class="" name="point_t2" placeholder="t2" type="number">
                 <button class="btn-light input-group-text">submit</button>
             </form>
         </td>

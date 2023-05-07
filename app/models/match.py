@@ -89,13 +89,13 @@ class Match(db.Model):
         db.session.commit()
 
     def get_setindex(self) -> int:
-        if self.point3 != "":
+        if self.point3:
             return 3
 
-        if self.point2 != "":
+        if self.point2:
             return 2
 
-        if self.point1 != "":
+        if self.point1:
             return 1
         return 0
 
