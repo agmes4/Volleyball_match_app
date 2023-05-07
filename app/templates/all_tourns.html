@@ -1,12 +1,12 @@
 {% extends 'index.html' %}
 {% block content %}
-<table>
-    <th>
-        <td>tournaments</td>
-    </th>
+<table class="table">
+    <tr>
+        <th>tournaments</th>
+    </tr>
 {% for tour in tourn %}
     <form method="GET" action="/tournament">
-    <tr>
+    <tr class="tab-content">
         <td>
             <button id="tourn" name="tourn" value="{{ tour.id }}">{{ tour.name }}</button>
         </td>

@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 {% block content %}
 <h1 class="h1">{{tourn.name}}</h1>
-<table class="table">
+<table class="table-secondary">
     <tr>
         <th>Teams in tournament</th>
     </tr>
@@ -21,7 +21,7 @@
         <th>Match3</th>
     </tr>
 {% for match in tourn.get_ongoing_matches() %}
-    <tr>
+    <tr class="tab-content">
         <td>
             {{ match.team1 }}
         </td>
@@ -40,5 +40,9 @@
     </tr>
 {% endfor %}
 </table>
+
+<form method="POST" action="/newMatches/{{ tourn.id }}" class="form-control">
+    <button class="btn-success">Calculate new matches</button>
+</form>
 {% endblock %}
 

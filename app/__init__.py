@@ -4,6 +4,8 @@ import random
 from pathlib import Path
 
 from flask import Flask, render_template, request, flash, redirect, url_for, session
+
+from .application import generate_matches
 from .models import db
 from .models.match import Match
 from .models.team import Team
@@ -75,14 +77,8 @@ def creat_app(test_config=None):
 
         db.session.add(tourn)
         db.session.commit()
-        matches = []
         logging.debug(f"{request.form.get('groups', 2)=}")
-        for team_index in range(0, len(teams), 2):
-            match = Match(team1=teams[team_index].id, team2=teams[team_index + 1].id, tourn_id=tourn.id)
-            db.session.add(match)
-            db.session.commit()
-            matches.append(match)
-        tourn.set_matches(matches)
+        generate_matches(tourn.id)
         return redirect(f"/tournament?tourn={tourn.id}")
 
     @app.route("/tournament")
@@ -99,6 +95,8 @@ def creat_app(test_config=None):
     def all_tourns():
         return render_template("all_tourns.html", tourn=Tournament.query.all())
 
-
+    @app.route("/newMatches/<tournamentid>", methods=["POST"])
+    def generate_new_matches(tournamentid: int):
+        generate_matches(tournamentid, 2)
 
     return app
