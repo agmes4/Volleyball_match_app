@@ -3852,3 +3852,11 @@ ol {
 .headline{
 	text-align: center;
 }
+.flashes{
+	  list-style-type: none;
+}
+.team_error{
+	color: red;
+	text-align: center;
+	text-decoration: fat;
+}
