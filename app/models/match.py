@@ -43,17 +43,22 @@ class Match(db.Model):
                 self.winner = team2
 
     def check_winner(self):
+        if self.get_setindex() < 2:
+            return
         wins_team1 = 0
+        wins_team2 = 0
 
         for point in self.get_points():
             game_points = point.split(":")
             if game_points[0] > game_points[1]:
                 wins_team1 += 1
+            if game_points[1] > game_points[0]:
+                wins_team2 += 1
         if wins_team1 >= 2:
             self.winner = self.team1
-        else:
+        elif wins_team2 >= 2:
             self.winner = self.team2
-        db.session.commit()
+            db.session.commit()
 
     def __repr__(self) -> str:
         output = f"Team: {self.team1} played against {self.team2}\n"
@@ -72,7 +77,7 @@ class Match(db.Model):
                 self.point2 = points
             else:
                 self.point3 = points
-        self.check_winner()
+            self.check_winner()
         db.session.commit()
 
     def change_points(self, points, set):

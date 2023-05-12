@@ -1,5 +1,6 @@
 
 from . import db
+from .match import Match
 
 tags_teams = db.Table('tags_team',
     db.Column('tournament_id', db.Integer, db.ForeignKey('tournament.id'), primary_key=True),
@@ -13,7 +14,7 @@ class Tournament(db.Model):
         backref=db.backref('teams', lazy=True))
     groups = db.Column(db.Integer, nullable=True)
 
-    matches = db.relationship("Match", backref='post')
+    matches = db.relationship("Match", backref='post', lazy=True)
 
     def __init__(self, name: str, teams: list, groups=2):
         self.name = name
@@ -21,7 +22,8 @@ class Tournament(db.Model):
         self.groups = groups
 
     def set_matches(self, matches: list):
-        self.matches = matches
+        for match in matches:
+            self.matches.append(match)
 
     def get_ongoing_matches(self) -> list:
         on = []
@@ -29,3 +31,6 @@ class Tournament(db.Model):
             if match.winner is None:
                 on.append(match)
         return on
+
+    def get_all_matches(self) -> list:
+        return Match.query.filter_by(tourn_id=self.id).all()
