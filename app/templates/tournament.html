@@ -25,10 +25,12 @@
     <h2>Matches overview</h2>
     <tr class="tab-content">
 
-        <td>
+        <td {% if match.team1 == match.winner %} style="text-decoration: underline;" {% endif %}>
+            {% if match.team1 == match.winner %}<i class="fa fa-trophy"></i>{% endif %}
             {{match.team1}}
         </td>
-        <td>
+        <td {% if match.team2 == match.winner %} style="text-decoration: underline;" {% endif %}>
+            {% if match.team2 == match.winner %}<i class="fa fa-trophy"></i>{% endif %}
             {{ match.team2 }}
         </td>
         {% if match.point1 %}
